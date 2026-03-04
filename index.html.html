@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transconverge · AI‑driven pet brand distribution</title>
+  <meta name="description" content="Transconverge connects global premium pet brands with China's instant retail market through AI-powered supply chain solutions.">
+  <!-- Font Awesome 6 (free) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- improved CSS with design tokens, scroll margin, responsive fixes -->
+  <style>
+    /* ----- DESIGN TOKENS (light, modern) ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f8f9fa;
+      color: #1a1e24;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* custom properties for easy theming */
+    :root {
+      --space-unit: 8px;
+      --container-padding: clamp(1rem, 5vw, 2rem);
+      --color-bg: #f8f9fa;
+      --color-text: #1a1e24;
+      --color-text-light: #4a5568;
+      --color-border: #e9ecef;
+      --color-card-bg: #ffffff;
+      --shadow-hover: 0 20px 35px -8px rgba(0,0,0,0.07), 0 8px 12px -4px rgba(0,0,0,0.03);
+      --border-radius-card: 24px;
+      --border-radius-img: 18px;
+      --transition-default: 0.25s ease;
+    }
+
+    .container {
+      width: min(88%, 1300px);
+      margin-inline: auto;
+    }
+
+    /* section spacing */
+    section {
+      padding: clamp(4rem, 10vh, 7rem) 0;
+      scroll-margin-top: 80px;  /* avoids fixed header overlap */
+    }
+
+    /* headings: no more white-space:nowrap — they wrap gracefully */
+    h1, h2, h3 {
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      margin: 1rem 0 0.5rem;
+    }
+
+    p {
+      color: var(--color-text-light);
+      max-width: 65ch;        /* better readability than fixed px */
+      margin-bottom: 1.2rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ----- buttons ----- */
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.2rem;
+      border: 1.5px solid #1a1e24;
+      border-radius: 48px;     /* softer, modern */
+      font-weight: 500;
+      background: transparent;
+      transition: var(--transition-default);
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #1a1e24;
+      color: white;
+      border-color: #1a1e24;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -8px rgba(0,0,0,0.2);
+    }
+
+    /* ----- fixed header ----- */
+    header {
+      position: fixed;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      z-index: 1000;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .nav strong {
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav > div:last-child {
+      display: flex;
+      gap: clamp(1rem, 2.5vw, 2.5rem);
+      align-items: center;
+    }
+
+    .nav a {
+      font-weight: 500;
+      font-size: 1rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+
+    .nav a:hover {
+      border-bottom-color: #1a1e24;
+      opacity: 0.8;
+    }
+
+    /* ----- hero section ----- */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+      min-height: 100vh;        /* keeps original height but adapts */
+      padding-top: 120px;       /* header compensation */
+    }
+
+    .hero-text {
+      flex: 1 1 45%;
+    }
+
+    .hero-img {
+      flex: 1 1 50%;
+      aspect-ratio: 4/3;        /* consistent ratio, prevents layout shift */
+      border-radius: var(--border-radius-img);
+      overflow: hidden;
+      background: #e0e0e0;
+    }
+
+    .hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ----- card grid (3 columns) ----- */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      padding: 1.8rem 1.5rem 2.2rem;
+      border-radius: var(--border-radius-card);
+      transition: var(--transition-default);
+      border: 1px solid rgba(0,0,0,0.02);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-img {
+      aspect-ratio: 1 / 1;      /* square crop, consistent */
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      background: #f0f0f0;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.03);
+    }
+
+    /* ----- metrics row (investment) ----- */
+    .metrics {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      margin: 3rem 0 0;
+      flex-wrap: wrap;
+    }
+
+    .metric {
+      text-align: center;
+      flex: 1 1 150px;
+    }
+
+    .metric h2 {
+      font-size: clamp(2.8rem, 8vw, 4.2rem);
+      margin-bottom: 0.25rem;
+      color: #1a1e24;
+    }
+
+    .metric p {
+      font-size: 1.2rem;
+      color: #4b5565;
+      margin: 0 auto;
+    }
+
+    /* ----- contact section ----- */
+    .contact-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem 4rem;
+      align-items: center;
+      margin-top: 2rem;
+    }
+
+    .contact-box p {
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+    }
+
+    .contact-box i {
+      margin-right: 1.2rem;
+      margin-top: 1rem;
+      color: #2c3e50;
+      transition: all 0.2s;
+    }
+
+    .contact-box i:hover {
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    .contact-img {
+      aspect-ratio: 5/4;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #ddd;
+    }
+
+    .contact-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* footer */
+    footer {
+      background: white;
+      padding: 2.5rem 0;
+      text-align: center;
+      border-top: 1px solid var(--color-border);
+      color: #5f6b7a;
+    }
+
+    /* ----- responsive fine-tuning ----- */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+        gap: 2rem;
+      }
+      .hero-text {
+        max-width: 700px;
+      }
+      .hero-img {
+        width: 100%;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .nav > div:last-child {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.2rem;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;   /* 1 column on mobile */
+      }
+
+      .metrics {
+        flex-direction: column;
+        align-items: center;
+        gap: 2.5rem;
+      }
+
+      .contact-box {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .contact-img {
+        order: -1;   /* image on top for small screens */
+        max-width: 500px;
+        margin-inline: auto;
+        width: 100%;
+      }
+    }
+
+    /* small touches */
+    .fab, .fas {
+      font-size: 1.8rem;  /* slightly smaller than fa-2x (2rem) but fine */
+      transition: 0.2s;
+    }
+
+    .fab:hover {
+      opacity: 0.7;
+      transform: translateY(-2px);
+    }
+
+    /* optional: active section marker */
+    ::selection {
+      background: #1a1e24;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <strong>TRANSCONVERGE</strong>
+    <div>
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#partners">Partners</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<main> <!-- added main landmark for better structure -->
+
+  <!-- HERO / HOME -->
+  <section id="home" class="hero container">
+    <div class="hero-text">
+      <h1>Global Premium Pet Distribution</h1>
+      <p>Transconverge introduces high-quality overseas pet brands into China’s rapidly growing instant retail ecosystem through AI-driven supply chain integration.</p>
+      <br>
+      <a href="#contact" class="btn">Partner With Us</a>
+    </div>
+    <div class="hero-img">
+      <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=1400&q=80"
+           alt="Happy dog with premium accessories, representing premium pet lifestyle"
+           loading="eager">
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="container">
+    <h2>AI Driven Supply Chain Solutions</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=75"
+               alt="Selection of premium pet products">
+        </div>
+        <h3>Premium Brand Import</h3>
+        <p>Strategic selection of high-quality international pet brands tailored to China’s premium demand growth.</p>
+      </div>
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1612536057832-2ff7ead58194?auto=format&fit=crop&w=800&q=75"
+               alt="Pet retail integration with modern devices">
+        </div>
+        <h3>Instant Retail Integration</h3>
+        <p>Deep integration with leading retail platforms ensuring stable supply and fast fulfillment.</p>
+      </div>
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=800&q=75"
+               alt="AI data analytics visualization for pet market">
+        </div>
+        <h3>AI Market Forecasting</h3>
+        <p>Data-driven demand prediction and inventory optimization powered by advanced AI systems.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVESTOR METRICS (anchor #partners used for nav) -->
+  <section id="partners" class="container">
+    <h2>Investment Highlights</h2>
+    <div class="metrics">
+      <div class="metric">
+        <h2>50+</h2>
+        <p>Global Brands</p>
+      </div>
+      <div class="metric">
+        <h2>300%</h2>
+        <p>Annual Growth</p>
+      </div>
+      <div class="metric">
+        <h2>20+</h2>
+        <p>Retail Channels</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS (industry insights) -->
+  <section id="news" class="container">
+    <h2>Industry Insights</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1601758064226-0a26d3a2a5d5?auto=format&fit=crop&w=800&q=75"
+               alt="Market trends chart with pet icons">
+        </div>
+        <h3>China Pet Market Trends</h3>
+        <p>The rapid expansion of premium consumption reshaping industry dynamics.</p>
+      </div>
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=75"
+               alt="AI and retail automation concept">
+        </div>
+        <h3>AI Retail Evolution</h3>
+        <p>Technology enabling smarter and more efficient retail distribution models.</p>
+      </div>
+      <div class="card">
+        <div class="card-img">
+          <img loading="lazy"
+               src="https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?auto=format&fit=crop&w=800&q=75"
+               alt="Localized pet brand packaging">
+        </div>
+        <h3>Brand Localization Strategy</h3>
+        <p>Bridging global brand identity with local consumer expectations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="container">
+    <h2>Contact Us</h2>
+    <div class="contact-box">
+      <div>
+        <p><strong>Address:</strong> E-commerce Center, Laoshan, Qingdao, China.</p>
+        <p><strong>Phone:</strong> <a href="tel:+8617806261562">+86 17806261562</a></p>
+        <p><strong>Email:</strong> <a href="mailto:kimweitransconverge@outlook.com">kimweitransconverge@outlook.com</a></p>
+        <p><strong>WhatsApp:</strong> <a href="https://wa.me/8617806261562" target="_blank">+86 17806261562</a></p>
+        <br>
+        <!-- social links with accessible labels -->
+        <a href="https://www.facebook.com/share/1KQDPJ8oP6/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+        <a href="https://www.instagram.com/transconverge/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+        <!-- note: original TikTok handle had a typo (transonverge), kept as is, but could be corrected if needed -->
+        <a href="https://www.tiktok.com/@transonverge" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok fa-2x"></i></a>
+      </div>
+      <div class="contact-img">
+        <img loading="lazy"
+             src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=1000&q=80"
+             alt="Happy dog close-up, friendly brand image">
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 Transconverge. All Rights Reserved.</p>
+</footer>
+
+<!-- small improvement: optional baseline for older browsers -->
+</body>
+</html>
